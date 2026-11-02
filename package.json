@@ -1,0 +1,17 @@
+{
+  "name": "tiktok-tts-overlay",
+  "version": "1.0.0",
+  "description": "TikTok LIVE text-to-speech overlay: reads comments, gifts, follows, shares and joins aloud on a webpage you add to TikTok Live Studio (or OBS) as a browser source.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5",
+    "tiktok-live-connector": "^2.5.0"
+  }
+}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TikTok TTS Overlay</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+
+  <!-- Connection status (top-right, subtle) -->
+  <div id="status" class="status offline">
+    <span class="status-dot"></span>
+    <span id="status-label">Connecting...</span>
+  </div>
+
+  <!-- Comment bubbles (left side) -->
+  <div id="comments" aria-live="polite"></div>
+
+  <!-- Gift / follow / share banners (center top) -->
+  <div id="alerts" aria-live="polite"></div>
+
+  <!-- Join toasts (bottom-left) -->
+  <div id="joins" aria-live="polite"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/overlay.js"></script>
+</body>
+</html>

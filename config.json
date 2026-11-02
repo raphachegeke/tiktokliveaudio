@@ -1,0 +1,23 @@
+{
+  "username": "raph_leon",
+
+  "port": 8383,
+
+  "speakComments": true,
+  "speakGifts": true,
+  "speakFollows": true,
+  "speakShares": true,
+  "speakJoins": true,
+
+  "maxCommentLength": 150,
+  "dedupeSeconds": 10,
+  "joinCooldownSeconds": 30,
+  "joinGlobalCooldownSeconds": 2,
+  "retryOfflineSeconds": 60,
+
+  "bannedWords": [],
+  "ignoredUsers": [],
+
+
+  "signApiKey": "euler_MGMxNzIyZjFiNGRkZjZlMmY4MjY4ZjhmODRlMjVlMjdmNmU0NzIzNThkNTEwOGQ0ODY5ZjEz"
+}
