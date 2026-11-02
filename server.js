@@ -179,12 +179,11 @@ function giftNameOf(data) {
 
 function giftImageOf(data) {
   const candidates = [
-    data.giftDetails?.giftImage?.url?.[0],
-    data.giftDetails?.giftImage?.url_list?.[0],
     data.extendedGiftInfo?.image?.url_list?.[0],
     data.extendedGiftInfo?.image?.urls?.[0],
     data.extendedGiftInfo?.images?.[0]?.url_list?.[0],
     data.giftDetails?.gift_image?.url_list?.[0],
+    data.giftDetails?.giftImage?.url_list?.[0],
   ];
   return candidates.find((c) => typeof c === 'string' && c.startsWith('http')) || null;
 }
@@ -331,17 +330,12 @@ function classifyConnectError(err, msg) {
 
 function buildConnection() {
   const options = {
+    // Give gift events their name / image data
+    enableExtendedGiftInfo: true,
     // Ignore the first batch of "old" chat history on connect so the overlay
     // doesn't read out a burst of messages from before the page opened
     processInitialData: false,
-    // IMPORTANT: enableExtendedGiftInfo is deliberately OFF. It triggers an
-    // extra signed HTTP call (gift/list) through Euler Stream, whose generic
-    // request-signing endpoint now requires a Business plan — that failure
-    // aborts the ENTIRE connection. Gift names and images still arrive
-    // natively in the WebSocket payload via data.giftDetails. Only turn this
-    // on (config.json -> "extendedGiftInfo": true) if you have a Business key.
   };
-  if (config.extendedGiftInfo === true) options.enableExtendedGiftInfo = true;
   if (config.signApiKey) options.signApiKey = config.signApiKey;
 
   const conn = new TikTokLiveConnection(username, options);
@@ -425,13 +419,17 @@ async function connectTikTok() {
       console.log(`   API key attached: ${String(config.signApiKey || '').trim() ? 'YES' : 'NO'} — key state: ${describeApiKey()}`);
       if (!quotaHintShown) {
         quotaHintShown = true;
-        console.log('\n   This endpoint (generic HTTP request signing) needs Euler\'s');
-        console.log('   Business plan. The overlay already avoids it — you should only');
-        console.log('   see this error if:');
-        console.log('     • config.json has "extendedGiftInfo": true  → set it to false');
-        console.log('       (you are running an old server.js — re-download the latest)');
-        console.log('     • Euler Stream itself is rate-limiting or briefly down →');
-        console.log('       waiting usually fixes it; the tool retries every 2 minutes.\n');
+        console.log('\n   If the key says NOT SET above, the tool is reading a different');
+        console.log('   config.json than the one you edited. Check:');
+        console.log('     • You edited config.json in the SAME folder you run npm start from');
+        console.log('     • Notepad may have saved it as config.json.txt (enable "File name');
+        console.log('       extensions" in File Explorer to verify)');
+        console.log('     • You restarted (Ctrl+C, then npm start) after saving the file');
+        console.log('     • Quick check: open http://localhost:' + PORT + "/healthz in a browser →");
+        console.log('       it should say "signKeyLoaded": true');
+        console.log('   If the key IS attached and it still fails, the shared/anonymous');
+        console.log('   allowance usually clears within the hour — the tool keeps retrying');
+        console.log('   every 2 minutes and will connect on its own.\n');
       }
       broadcastStatus({ type: 'retrying', connected: false, message: 'Signing quota reached — retrying in 2 min (see console)' });
       scheduleRetry(120000);

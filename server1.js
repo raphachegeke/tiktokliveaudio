@@ -160,20 +160,10 @@ let connectionState = {
 // ---------------------------------------------------------------------------
 
 function getUser(data) {
-  if (!data) return null;
-
-  if (data.user) return data.user;
-
-  if (data.member) return data.member;
-
-  if (Array.isArray(data.memberList) && data.memberList.length) {
+  if (data && data.user) return data.user;
+  if (data && Array.isArray(data.memberList) && data.memberList.length) {
     return data.memberList[data.memberList.length - 1];
   }
-
-  if (data.uniqueId || data.nickname) {
-    return data;
-  }
-
   return null;
 }
 
@@ -480,4 +470,3 @@ for (const sig of ['SIGINT', 'SIGTERM']) {
     setTimeout(() => process.exit(0), 2000);
   });
 }
-
